@@ -14,12 +14,13 @@ oauth2:
     redirect-uri: ${KAKAO_REDIRECT_URI}
 
   apple:
-    ios:
-      client-id: ${APPLE_IOS_CLIENT_ID}
-      team-id: ${APPLE_IOS_TEAM_ID}
-      key-id: ${APPLE_IOS_KEY_ID}
-      private-key: ${APPLE_IOS_PRIVATE_KEY}
-      token-url: ${APPLE_IOS_TOKEN_URL}
+    client-id: ${APPLE_CLIENT_ID}
+    key-id: ${APPLE_KEY_ID}
+    team-id: ${APPLE_TEAM_ID}
+    private-key: ${APPLE_PRIVATE_KEY}
+    public-key-url: ${APPLE_PUBLIC_KEY_URL}
+    token-url: ${APPLE_TOKEN_URL}
+    redirect-uri: ${APPLE_REDIRECT_URI}
 
 jwt:
   secret: ${JWT_SECRET}

@@ -56,13 +56,13 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
 
-                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtTokenProvider, tokenService, memberService), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtTokenProvider, tokenService, memberService), UsernamePasswordAuthenticationFilter.class)
 
                 // 예외 처리 적용
-                .exceptionHandling(exceptionHandling -> {
-                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
-                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
-                })
+//                .exceptionHandling(exceptionHandling -> {
+//                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+//                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
+//                })
 
                 .build();
     }

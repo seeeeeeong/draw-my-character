@@ -1,5 +1,8 @@
 package lee.io.ai.global.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lee.io.ai.global.exception.BusinessException;
+import lee.io.ai.global.exception.ErrorCode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
