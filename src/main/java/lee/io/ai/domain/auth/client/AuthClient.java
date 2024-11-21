@@ -84,14 +84,14 @@ public class AuthClient {
     }
 
     public String getGoogleAccessToken(String code) {
-//        String decode = URLDecoder.decode(code, StandardCharsets.UTF_8);
+        String decode = URLDecoder.decode(code, StandardCharsets.UTF_8);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         Map<String, String> body = new HashMap<>();
         body.put("client_id", googleProperties.getClientId());
         body.put("client_secret", googleProperties.getClientSecret());
-        body.put("code", code);
+        body.put("code", decode);
         body.put("grant_type", "authorization_code");
         body.put("redirect_uri", googleProperties.getRedirectUri());
         return oAuth2Util.getAccessToken(googleProperties.getTokenUrl(), headers, body);

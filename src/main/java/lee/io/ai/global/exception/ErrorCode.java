@@ -35,7 +35,6 @@ public enum ErrorCode {
     // OAuth
     GENERATE_KEY_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,  "키 생성에 실패하였습니다."),
 
-
     // Unsupported
     UNSUPPORTED_LOGIN_TYPE(HttpStatus.BAD_REQUEST, "지원하지 않는 로그인 타입입니다."),
 
