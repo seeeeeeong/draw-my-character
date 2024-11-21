@@ -1,0 +1,31 @@
+oauth2:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+    token-url: ${GOOGLE_TOKEN_URL}
+    user-info-url: ${GOOGLE_USER_INFO_URL}
+    redirect-uri: ${GOOGLE_REDIRECT_URI}
+
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID}
+    client-secret: ${KAKAO_CLIENT_SECRET}
+    token-url: ${KAKAO_TOKEN_URL}
+    user-info-url: ${KAKAO_USER_INFO_URL}
+    redirect-uri: ${KAKAO_REDIRECT_URI}
+
+  apple:
+    ios:
+      client-id: ${APPLE_IOS_CLIENT_ID}
+      team-id: ${APPLE_IOS_TEAM_ID}
+      key-id: ${APPLE_IOS_KEY_ID}
+      private-key: ${APPLE_IOS_PRIVATE_KEY}
+      token-url: ${APPLE_IOS_TOKEN_URL}
+
+jwt:
+  secret: ${JWT_SECRET}
+  access:
+    expiration: 3600000
+    header: Authorization
+  refresh:
+    expiration: 5184000000
+    header: Authorization-refresh
