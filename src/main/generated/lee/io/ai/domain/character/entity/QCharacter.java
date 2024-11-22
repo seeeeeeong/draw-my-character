@@ -33,8 +33,6 @@ public class QCharacter extends EntityPathBase<Character> {
 
     public final StringPath features = createString("features");
 
-    public final StringPath generationId = createString("generationId");
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final lee.io.ai.domain.member.entity.QMember member;
