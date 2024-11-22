@@ -1,11 +1,11 @@
-package lee.io.ai.domain.ai.controller;
+package lee.io.ai.domain.image.controller;
 
 import jakarta.validation.Valid;
-import lee.io.ai.domain.ai.dto.CreateImageReqDto;
-import lee.io.ai.domain.ai.dto.CreateImageResDto;
-import lee.io.ai.domain.ai.dto.GetImageFeaturesReqDto;
-import lee.io.ai.domain.ai.dto.GetImageFeaturesResDto;
-import lee.io.ai.domain.ai.service.ImageService;
+import lee.io.ai.domain.image.dto.CreateImageReqDto;
+import lee.io.ai.domain.image.dto.CreateImageResDto;
+import lee.io.ai.domain.image.dto.GetImageFeaturesReqDto;
+import lee.io.ai.domain.image.dto.GetImageFeaturesResDto;
+import lee.io.ai.domain.image.service.ImageService;
 import lee.io.ai.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package lee.io.ai.domain.ai.dto;
+package lee.io.ai.domain.image.dto;
 
 import lombok.Getter;
 

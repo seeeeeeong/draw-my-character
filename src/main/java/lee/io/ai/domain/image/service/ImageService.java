@@ -1,9 +1,9 @@
-package lee.io.ai.domain.ai.service;
+package lee.io.ai.domain.image.service;
 
-import lee.io.ai.domain.ai.dto.CreateImageReqDto;
-import lee.io.ai.domain.ai.dto.CreateImageResDto;
-import lee.io.ai.domain.ai.dto.GetImageFeaturesReqDto;
-import lee.io.ai.domain.ai.dto.GetImageFeaturesResDto;
+import lee.io.ai.domain.image.dto.CreateImageReqDto;
+import lee.io.ai.domain.image.dto.CreateImageResDto;
+import lee.io.ai.domain.image.dto.GetImageFeaturesReqDto;
+import lee.io.ai.domain.image.dto.GetImageFeaturesResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.image.ImagePrompt;
