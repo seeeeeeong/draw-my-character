@@ -52,17 +52,17 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/health_check").permitAll() // Swagger 경로 허용
                         .requestMatchers("/access").permitAll() // 토큰 발급 기능 허용
                         .requestMatchers("/login/oauth2/**").permitAll()
-                        .requestMatchers("/chat/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
 
-//                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtTokenProvider, tokenService, memberService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtTokenProvider, tokenService, memberService), UsernamePasswordAuthenticationFilter.class)
 
                 // 예외 처리 적용
-//                .exceptionHandling(exceptionHandling -> {
-//                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
-//                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
-//                })
+                .exceptionHandling(exceptionHandling -> {
+                    exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+                    exceptionHandling.accessDeniedHandler(new JwtAccessDeniedHandler());
+                })
 
                 .build();
     }
