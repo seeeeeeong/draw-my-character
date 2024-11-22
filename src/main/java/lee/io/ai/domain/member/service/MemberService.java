@@ -16,6 +16,10 @@ public class MemberService {
         return memberCreator.createMember(email, providerUid, provider);
     }
 
+    public Member getById(Long memberId) {
+        return memberRetriever.getById(memberId);
+    }
+
     public Member getByProviderUid(String providerUid, Provider provider) {
         return memberRetriever.getByProviderUid(providerUid, provider);
     }

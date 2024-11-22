@@ -4,6 +4,8 @@ import lee.io.ai.domain.image.dto.CreateImageReqDto;
 import lee.io.ai.domain.image.dto.CreateImageResDto;
 import lee.io.ai.domain.image.dto.GetImageFeaturesReqDto;
 import lee.io.ai.domain.image.dto.GetImageFeaturesResDto;
+import lee.io.ai.global.exception.BusinessException;
+import lee.io.ai.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.image.ImagePrompt;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,16 +47,16 @@ public class ImageService {
     public GetImageFeaturesResDto getImageFeatures(GetImageFeaturesReqDto request) {
 
         String prompt = featuresPrompt;
-        UserMessage userMessage = new UserMessage(prompt, Collections.singletonList(new Media(MediaType.IMAGE_JPEG, request.getImageUrl())));
+        UserMessage userMessage = new UserMessage(prompt, Collections.singletonList(new Media(MediaType.IMAGE_JPEG, request.imageUrl())));
 
         String features = openAiChatModel.call(userMessage);
 
-        return GetImageFeaturesResDto.of(features);
+        return new GetImageFeaturesResDto(request.imageUrl(), features);
     }
 
     public CreateImageResDto createImagesByFeatures(CreateImageReqDto request) {
         ExecutorService executorService = Executors.newFixedThreadPool(poolCoreSize);
-        String prompt = createPrompt + request.getFeatures();
+        String prompt = createPrompt + request.features();
 
         OpenAiImageOptions options = OpenAiImageOptions.builder()
                 .withQuality("hd")
@@ -63,7 +67,7 @@ public class ImageService {
 
         List<CompletableFuture<String>> futureImageUrls = new ArrayList<>();
 
-        for (int i=0; i < request.getNumberOfImages(); i++) {
+        for (int i=0; i < request.numberOfImages(); i++) {
             CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
                 ImagePrompt imagePrompt = new ImagePrompt(prompt, options);
                 return openAiImageModel.call(imagePrompt).getResult().getOutput().getUrl();
@@ -76,7 +80,16 @@ public class ImageService {
                 .collect(Collectors.toList());
         executorService.shutdown();
 
-        return CreateImageResDto.of(imageUrls, request.getFeatures());
+        return new CreateImageResDto(imageUrls, request.features());
+    }
+
+    private URL getUrl(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            return url;
+        } catch (MalformedURLException e) {
+            throw new BusinessException(ErrorCode.MALFORMED_URL);
+        }
     }
 
 }

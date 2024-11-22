@@ -24,10 +24,14 @@ public class QCharacter extends EntityPathBase<Character> {
 
     public final lee.io.ai.global.entity.QBaseTimeEntity _super = new lee.io.ai.global.entity.QBaseTimeEntity(this);
 
+    public final StringPath characterImage = createString("characterImage");
+
+    public final StringPath characterName = createString("characterName");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final StringPath feature = createString("feature");
+    public final StringPath features = createString("features");
 
     public final StringPath generationId = createString("generationId");
 
@@ -37,8 +41,6 @@ public class QCharacter extends EntityPathBase<Character> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
-
-    public final StringPath name = createString("name");
 
     public QCharacter(String variable) {
         this(Character.class, forVariable(variable), INITS);

@@ -5,17 +5,17 @@ import lombok.Getter;
 
 import java.util.List;
 
-@Getter
-@Builder
-public class CreateImageResDto {
-
-    private List<String> imageUrls;
-    private String features;
-
-    public static CreateImageResDto of(List<String> imageUrls, String features) {
-        return CreateImageResDto.builder()
-                .imageUrls(imageUrls)
-                .features(features)
-                .build();
+public record CreateImageResDto (
+        List<String> imageUrls,
+        String features
+){
+    public static CreateImageResDto of(
+            final List<String> imageUrls,
+            final String features
+    ) {
+        return new CreateImageResDto(
+                imageUrls,
+                features
+        );
     }
 }

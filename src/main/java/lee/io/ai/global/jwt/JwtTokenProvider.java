@@ -51,7 +51,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaim(accessToken);
 
-        Long memberId = (Long) claims.get("MEMBER_ID");
+        Long memberId = Long.parseLong((String) claims.get("MEMBER_ID"));
 
         if (claims.get("ROLE") == null || !StringUtils.hasText(claims.get("ROLE").toString())) {
             throw new UnAuthorizedException(ErrorCode.UNAUTHORIZED);
@@ -90,7 +90,7 @@ public class JwtTokenProvider {
     public TokenDto createToken(Member member) {
         Claims claims = Jwts.claims();
 
-        claims.put("MEMBER_ID", member.getId());
+        claims.put("MEMBER_ID", member.getId().toString());
         claims.put("ROLE", member.getRole());
 
         Date now = new Date();

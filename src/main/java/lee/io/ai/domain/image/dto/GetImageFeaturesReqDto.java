@@ -4,9 +4,7 @@ import lombok.Getter;
 
 import java.net.URL;
 
-@Getter
-public class GetImageFeaturesReqDto {
-
-    private URL imageUrl;
-
+public record GetImageFeaturesReqDto(
+        URL imageUrl
+) {
 }
