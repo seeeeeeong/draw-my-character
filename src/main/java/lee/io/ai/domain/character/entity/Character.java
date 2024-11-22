@@ -17,7 +17,8 @@ public class Character extends BaseTimeEntity {
     private Long id;
 
     private String generationId;
-    private String name;
+    private String characterName;
+    private String characterImage;
     private String feature;
 
     @ManyToOne(fetch = FetchType.LAZY)
