@@ -52,7 +52,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/health_check").permitAll() // Swagger 경로 허용
                         .requestMatchers("/access").permitAll() // 토큰 발급 기능 허용
                         .requestMatchers("/login/oauth2/**").permitAll()
-                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/ai/**").permitAll()
+                        .requestMatchers("/characters/**").permitAll()
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요
                 )
 

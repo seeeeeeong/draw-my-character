@@ -1,19 +1,16 @@
-package lee.io.ai.domain.image.dto;
-
-import lombok.Builder;
-import lombok.Getter;
+package lee.io.ai.domain.ai.dto;
 
 import java.util.List;
 
-public record CreateImageResDto (
+public record GenerateImageResDto(
         List<String> imageUrls,
         String features
 ){
-    public static CreateImageResDto of(
+    public static GenerateImageResDto of(
             final List<String> imageUrls,
             final String features
     ) {
-        return new CreateImageResDto(
+        return new GenerateImageResDto(
                 imageUrls,
                 features
         );

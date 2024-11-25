@@ -1,31 +1,76 @@
 package lee.io.ai.domain.character.service;
 
-import lee.io.ai.domain.character.dto.CharacterReqDto;
-import lee.io.ai.domain.character.dto.CharacterResDto;
+import lee.io.ai.domain.character.dto.*;
 import lee.io.ai.domain.character.entity.Character;
-import lee.io.ai.domain.character.repository.CharacterRepository;
-import lee.io.ai.domain.image.service.ImageService;
 import lee.io.ai.domain.member.entity.Member;
-import lee.io.ai.domain.member.service.MemberService;
+import lee.io.ai.domain.member.service.MemberRetriever;
+import lee.io.ai.global.exception.BusinessException;
+import lee.io.ai.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CharacterService {
 
-    private final CharacterRepository characterRepository;
+    private final CharacterRetriever characterRetriever;
+    private final CharacterCreator characterCreator;
+    private final CharacterRemover characterRemover;
 
-    private final MemberService memberService;
-    private final ImageService imageService;
+    private final MemberRetriever memberRetriever;
 
     @Transactional
-    public CharacterResDto createCharacter(Long memberId, CharacterReqDto request) {
-        Member member = memberService.getById(memberId);
-        Character character = Character.create(request.characterName(), request.characterImage(), request.features(), member);
-        characterRepository.save(character);
-        return CharacterResDto.from(character);
+    public CreateCharacterResDto createCharacter(Long memberId, CreateCharacterReqDto request) {
+        Member member = memberRetriever.getMemberByMemberId(memberId);
+        Character character = characterCreator.createCharacter(request.characterName(), request.characterImageUrl(), request.features(), request.isAnonymous(), member);
+        return CreateCharacterResDto.from(character);
     }
+
+    public List<GetCharactersListResDto> getCharacterList(Long memberId) {
+        List<Character> characters = characterRetriever.getAllCharacters();
+        List<GetCharactersListResDto> getCharactersListResDtos = characters.stream()
+                .map(character -> GetCharactersListResDto.from(character, memberId))
+                .collect(Collectors.toList());
+        return getCharactersListResDtos;
+    }
+
+    public GetCharacterDetailResDto getCharacterDetail(Long memberId, Long characterId) {
+        Character character = characterRetriever.getCharacterByCharacterId(characterId);
+        return GetCharacterDetailResDto.of(character, memberId);
+    }
+
+    @Transactional
+    public Boolean updateCharacter(Long memberId, Long characterId, UpdateCharacterReqDto request) {
+        Character character = characterRetriever.getCharacterByCharacterId(characterId);
+
+        if (!character.getMember().getId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.CHARACTER_NOT_FOUND);
+        }
+
+        character.updateCharacterName(request.characterName());
+        return true;
+    }
+
+    @Transactional
+    public Boolean deleteCharacter(Long memberId, DeleteCharacterReqDto request) {
+        List<Character> characters = request.characterIds().stream()
+                .map(characterId -> characterRetriever.getCharacterByCharacterId(characterId))
+                .collect(Collectors.toList());
+
+        for (Character character : characters) {
+            if (!character.getMember().getId().equals(memberId)) {
+                throw new BusinessException(ErrorCode.CHARACTER_NOT_FOUND);
+            }
+        }
+
+        characterRemover.deleteAll(characters);
+        return true;
+    }
+
+
 
 }

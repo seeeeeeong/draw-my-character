@@ -1,33 +1,40 @@
 package lee.io.ai.domain.image.controller;
 
 import jakarta.validation.Valid;
-import lee.io.ai.domain.image.dto.CreateImageReqDto;
-import lee.io.ai.domain.image.dto.CreateImageResDto;
-import lee.io.ai.domain.image.dto.GetImageFeaturesReqDto;
-import lee.io.ai.domain.image.dto.GetImageFeaturesResDto;
+import lee.io.ai.domain.image.dto.*;
 import lee.io.ai.domain.image.service.ImageService;
 import lee.io.ai.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping
 @RequiredArgsConstructor
 public class ImageController {
 
     private final ImageService imageService;
 
-    @PostMapping("/features")
-    public ApiResponse<GetImageFeaturesResDto> getImageFeatures(@RequestBody GetImageFeaturesReqDto request) {
-        return ApiResponse.success(imageService.getImageFeatures(request));
+    @PostMapping("/characters/{characterId}/images")
+    public ApiResponse<CreateCharacterImageResDto> createCharacterImage(@AuthenticationPrincipal Long memberId,
+                                                                        @PathVariable("characterId") Long characterId,
+                                                                        @RequestBody @Valid CreateCharacterImageReqDto request) {
+        return ApiResponse.created(imageService.createCharacterImage(memberId, characterId, request));
     }
 
-    @PostMapping
-    public ApiResponse<CreateImageResDto> createImagesByFeatures(@RequestBody @Valid CreateImageReqDto request) {
-        return ApiResponse.success(imageService.createImagesByFeatures(request));
+    @PutMapping("/characters/{characterId}/images/{imageId}")
+    public ApiResponse<Boolean> updateCharacterImage(@AuthenticationPrincipal Long memberId,
+                                                  @PathVariable("characterId") Long characterId,
+                                                  @PathVariable("imageId") Long imageId,
+                                                  @RequestBody @Valid UpdateImageReqDto request) {
+        return ApiResponse.success(imageService.updateCharacterImage(memberId, characterId, imageId, request));
+    }
+
+    @DeleteMapping("/characters/{characterId}/images")
+    public ApiResponse<Boolean> deleteCharacterImage(@AuthenticationPrincipal Long memberId,
+                                                     @PathVariable("characterId") Long characterId,
+                                                     @RequestBody @Valid DeleteImageReqDto request) {
+        return ApiResponse.success(imageService.deleteImage(memberId, characterId, request));
     }
 
 }

@@ -2,19 +2,19 @@ package lee.io.ai.domain.character.dto;
 
 import lee.io.ai.domain.character.entity.Character;
 
-public record CharacterResDto(
+public record CreateCharacterResDto(
         Long characterId,
         String characterName,
-        String characterImage,
+        String characterImageUrl,
         String features
 ) {
-    public static CharacterResDto from(
+    public static CreateCharacterResDto from(
             final Character character
     ) {
-        return new CharacterResDto(
+        return new CreateCharacterResDto(
                 character.getId(),
                 character.getCharacterName(),
-                character.getCharacterImage(),
+                character.getCharacterImageUrl(),
                 character.getFeatures()
         );
     }

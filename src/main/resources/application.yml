@@ -35,10 +35,11 @@ spring:
 
 image:
   features:
-    prompt: "이 사진을 다시 그릴 수 있도록 신체 지수, 얼굴 특징, 옷, 패션 등을 자세하게 한 문장으로 나열해서 정리해줘.\n사진 속 인물의 신체 지수와 특징, 스펙을 자세한 숫자 수치를 포함해서 알려줘\n만약, 특정 인물의 신체 지수나 상세한 수치를 제공할 수 없으면, 가상의 수치로 알려줘\n응답 형식은 한 줄로 [특징]: 이후에 알려줘\n다음은 응답 예시야\n[특징]: 신체 지수는 키 170cm, 몸무게 60kg의 슬림하고 날렵한 체형으로 어깨와 허리의 비율이 균형 잡혀 있으며 전체적으로 중간 체격을 가졌고, 얼굴은 살짝 둥근 얼굴형에 부드러운 턱선, 작은 코와 높은 콧대, 크고 반짝이는 검은 눈, 가늘고 아치형의 눈썹, 자연스러운 미소가 어우러진 입술이 특징이며, 헤어스타일은 어깨 위로 내려오는 웨이브가 있는 브라운 헤어와 앞머리를 살짝 옆으로 넘긴 세련된 스타일을 하고 있고, 의상은 하얀색 셔츠에 스카이 블루 니트 조끼를 레이어드하고 어깨에 네이비 블레이저를 걸쳤으며 체크 무늬 플리츠 스커트를 착용했고, 패션 디테일로는 발목까지 올라오는 흰색 양말과 블랙 로퍼를 신고 심플한 디자인의 검정색 백팩을 매치했으며, 표정과 분위기는 부드럽고 친근한 표정에 가벼운 미소로 활기차고 생기 있는 인상을 주며, 추가적으로 밝은 피부톤과 정돈된 외모를 갖추고 얇고 긴 손가락이 돋보이며 전반적으로 단정하고 똑똑한 느낌을 전달한다."
+    prompt: ${IMAGE_FEATURES_PROMPT}
   create:
-    prompt: "사용자가 인물의 특징을 입력하면 너는 최상의 퀄리티로 인물을 그려줘, 인물만 나오고 배경은 흰색으로, 요청한 인물 한 명만 나오게 해줘\n{features}"
-
+    prompt: ${IMAGE_CREATE_PROMPT}
+  character:
+    prompt: ${IMAGE_CHARACTER_PROMPT}
 
 ---
 spring:
@@ -47,7 +48,7 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:postgresql://lingualog-db.cy5hpggpflkg.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    url: jdbc:postgresql://aiservicedb.cne4ko2mylsm.ap-northeast-2.rds.amazonaws.com:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -55,7 +56,7 @@ spring:
   jpa:
     hibernate:
       default_batch_fetch_size: 100
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
     properties:
       hibernate:
@@ -72,7 +73,7 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:postgresql://lingualog-db.cy5hpggpflkg.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    url: jdbc:postgresql://aiservicedb.cne4ko2mylsm.ap-northeast-2.rds.amazonaws.com:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -80,7 +81,7 @@ spring:
   jpa:
     hibernate:
       default_batch_fetch_size: 100
-      ddl-auto: create-drop
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:

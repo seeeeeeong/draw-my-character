@@ -1,96 +1,69 @@
 package lee.io.ai.domain.image.service;
 
-import lee.io.ai.domain.image.dto.CreateImageReqDto;
-import lee.io.ai.domain.image.dto.CreateImageResDto;
-import lee.io.ai.domain.image.dto.GetImageFeaturesReqDto;
-import lee.io.ai.domain.image.dto.GetImageFeaturesResDto;
+import lee.io.ai.domain.character.entity.Character;
+import lee.io.ai.domain.character.service.CharacterRetriever;
+import lee.io.ai.domain.image.dto.*;
+import lee.io.ai.domain.image.entity.Image;
+import lee.io.ai.domain.member.service.MemberRetriever;
 import lee.io.ai.global.exception.BusinessException;
 import lee.io.ai.global.exception.ErrorCode;
+import lee.io.ai.global.exception.notfound.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.image.ImagePrompt;
-import org.springframework.ai.model.Media;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiImageModel;
-import org.springframework.ai.openai.OpenAiImageOptions;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ImageService {
 
-    private final OpenAiChatModel openAiChatModel;
-    private final OpenAiImageModel openAiImageModel;
+    private final ImageCreator imageCreator;
+    private final ImageRetriever imageRetriever;
+    private final ImageRemover imageRemover;
 
-    @Value("${image.features.prompt}")
-    private String featuresPrompt;
+    private final CharacterRetriever characterRetriever;
 
-    @Value("${image.create.prompt}")
-    private String createPrompt;
+    @Transactional
+    public CreateCharacterImageResDto createCharacterImage(Long memberId, Long characterId, CreateCharacterImageReqDto request) {
+        Character character = characterRetriever.getCharacterByCharacterId(characterId);
 
-    @Value("${spring.task.execution.pool.core-size}")
-    private Integer poolCoreSize;
-
-
-    public GetImageFeaturesResDto getImageFeatures(GetImageFeaturesReqDto request) {
-
-        String prompt = featuresPrompt;
-        UserMessage userMessage = new UserMessage(prompt, Collections.singletonList(new Media(MediaType.IMAGE_JPEG, request.imageUrl())));
-
-        String features = openAiChatModel.call(userMessage);
-
-        return new GetImageFeaturesResDto(request.imageUrl(), features);
-    }
-
-    public CreateImageResDto createImagesByFeatures(CreateImageReqDto request) {
-        ExecutorService executorService = Executors.newFixedThreadPool(poolCoreSize);
-        String prompt = createPrompt + request.features();
-
-        OpenAiImageOptions options = OpenAiImageOptions.builder()
-                .withQuality("hd")
-                .withN(1)
-                .withHeight(1024)
-                .withWidth(1024)
-                .build();
-
-        List<CompletableFuture<String>> futureImageUrls = new ArrayList<>();
-
-        for (int i=0; i < request.numberOfImages(); i++) {
-            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
-                ImagePrompt imagePrompt = new ImagePrompt(prompt, options);
-                return openAiImageModel.call(imagePrompt).getResult().getOutput().getUrl();
-            });
-            futureImageUrls.add(future);
+        if (!character.getMember().getId().equals(memberId)) {
+            throw new EntityNotFoundException(ErrorCode.CHARACTER_NOT_FOUND);
         }
 
-        List<String> imageUrls = futureImageUrls.stream()
-                .map(CompletableFuture::join)
+        Image image = imageCreator.createImage(request.imageName(), request.imageUrl(), request.action(), character);
+        return CreateCharacterImageResDto.from(image);
+    }
+
+    @Transactional
+    public Boolean updateCharacterImage(Long memberId, Long characterId, Long imageId, UpdateImageReqDto request) {
+        Character character = characterRetriever.getCharacterByCharacterId(characterId);
+
+        if (!character.getMember().getId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.CHARACTER_NOT_FOUND);
+        }
+
+        Image image = imageRetriever.getImagesByImageId(imageId);
+        image.updateImageName(request.imageName());
+        return true;
+    }
+
+    @Transactional
+    public Boolean deleteImage(Long memberId, Long characterId, DeleteImageReqDto request) {
+        Character character = characterRetriever.getCharacterByCharacterId(characterId);
+
+        if (!character.getMember().getId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.CHARACTER_NOT_FOUND);
+        }
+
+        List<Image> images = request.imageIds().stream()
+                .map(imageId -> imageRetriever.getImagesByImageId(imageId))
                 .collect(Collectors.toList());
-        executorService.shutdown();
 
-        return new CreateImageResDto(imageUrls, request.features());
+        imageRemover.deleteAll(images);
+        return true;
     }
-
-    private URL getUrl(String urlString) {
-        try {
-            URL url = new URL(urlString);
-            return url;
-        } catch (MalformedURLException e) {
-            throw new BusinessException(ErrorCode.MALFORMED_URL);
-        }
-    }
-
 }
 

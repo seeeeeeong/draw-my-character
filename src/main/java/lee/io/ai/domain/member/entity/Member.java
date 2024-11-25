@@ -1,10 +1,14 @@
 package lee.io.ai.domain.member.entity;
 
 import jakarta.persistence.*;
+import lee.io.ai.domain.character.entity.Character;
 import lee.io.ai.domain.member.enums.Provider;
 import lee.io.ai.domain.member.enums.Role;
 import lee.io.ai.global.entity.BaseTimeEntity;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -26,6 +30,9 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Character> characters = new ArrayList<>();
+
     public static Member of(
             final String email,
             final String providerUid,
@@ -38,5 +45,4 @@ public class Member extends BaseTimeEntity {
                 .role(Role.USER)
                 .build();
     }
-
 }

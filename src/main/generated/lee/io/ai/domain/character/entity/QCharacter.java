@@ -24,7 +24,9 @@ public class QCharacter extends EntityPathBase<Character> {
 
     public final lee.io.ai.global.entity.QBaseTimeEntity _super = new lee.io.ai.global.entity.QBaseTimeEntity(this);
 
-    public final StringPath characterImage = createString("characterImage");
+    public final BooleanPath anonymous = createBoolean("anonymous");
+
+    public final StringPath characterImageUrl = createString("characterImageUrl");
 
     public final StringPath characterName = createString("characterName");
 
@@ -34,6 +36,8 @@ public class QCharacter extends EntityPathBase<Character> {
     public final StringPath features = createString("features");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final ListPath<lee.io.ai.domain.image.entity.Image, lee.io.ai.domain.image.entity.QImage> images = this.<lee.io.ai.domain.image.entity.Image, lee.io.ai.domain.image.entity.QImage>createList("images", lee.io.ai.domain.image.entity.Image.class, lee.io.ai.domain.image.entity.QImage.class, PathInits.DIRECT2);
 
     public final lee.io.ai.domain.member.entity.QMember member;
 
