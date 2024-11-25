@@ -16,6 +16,10 @@ public class MemberRetriever {
 
     private final MemberRepository memberRepository;
 
+    public Member getMemberByMemberId(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
     public Member getByProviderUid(String providerUid, Provider provider) {
         return memberRepository.findByProviderUidAndProvider(providerUid, provider).orElse(null);
     }
