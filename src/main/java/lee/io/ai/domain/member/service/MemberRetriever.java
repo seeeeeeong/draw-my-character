@@ -20,11 +20,11 @@ public class MemberRetriever {
         return memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    public Member getByProviderUid(String providerUid, Provider provider) {
+    public Member getMemberByProviderUid(String providerUid, Provider provider) {
         return memberRepository.findByProviderUidAndProvider(providerUid, provider).orElse(null);
     }
 
-    public Member getByRefreshToken(String refreshToken) {
+    public Member getMemberByRefreshToken(String refreshToken) {
         return memberRepository.findByRefreshToken(refreshToken).orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }

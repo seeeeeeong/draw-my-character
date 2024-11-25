@@ -23,11 +23,11 @@ public class MemberService {
     }
 
     public Member getByProviderUid(String providerUid, Provider provider) {
-        return memberRetriever.getByProviderUid(providerUid, provider);
+        return memberRetriever.getMemberByProviderUid(providerUid, provider);
     }
 
     public Member getByRefreshToken(String refreshToken) {
-        return memberRetriever.getByRefreshToken(refreshToken);
+        return memberRetriever.getMemberByRefreshToken(refreshToken);
     }
 
     public List<GetCharactersListResDto> getCharacterListByMember(Long memberId) {
