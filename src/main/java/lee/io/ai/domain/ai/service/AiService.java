@@ -62,8 +62,8 @@ public class AiService {
         UserMessage userMessage = new UserMessage(prompt, Collections.singletonList(new Media(MediaType.IMAGE_JPEG, imageUrl)));
 
         String features = openAiChatModel.call(userMessage);
-        String featuresAfterColon = features.split(":", 2)[1].trim();
-        return AnalyzeImageResDto.of(request.imageUrl(), featuresAfterColon);
+//        String featuresAfterColon = features.split(":", 2)[1].trim();
+        return AnalyzeImageResDto.of(request.imageUrl(), features);
     }
 
     public GenerateImageResDto generateImage(GenerateImageReqDto request) {
@@ -94,6 +94,7 @@ public class AiService {
 
         return GenerateImageResDto.of(imageUrls, request.features());
     }
+
 
     public GenerateImageWithActionResDto generateImageWithAction(Long memberId, GenerateImageWithActionReqDto request) {
         ExecutorService executorService = Executors.newFixedThreadPool(poolCoreSize);

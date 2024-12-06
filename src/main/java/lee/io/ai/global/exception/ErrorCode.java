@@ -46,7 +46,11 @@ public enum ErrorCode {
     CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "캐릭터 정보를 찾을 수 없습니다."),
 
     // Image
-    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지 정보를 찾을 수 없습니다.")
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지 정보를 찾을 수 없습니다."),
+
+    // Like
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 정보를 찾을 수 없습니다."),
+    ALREADY_LIKED(HttpStatus.CONFLICT, "좋아요 정보가 존재합니다.")
 
     ;
 

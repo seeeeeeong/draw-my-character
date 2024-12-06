@@ -1,22 +1,22 @@
 package lee.io.ai.domain.character.dto;
 
 import lee.io.ai.domain.character.entity.Character;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public record GetCharactersListResDto(
-        Long characterId,
-        String characterName,
-        String characterImageUrl,
-        boolean isMyCharacter
-) {
-    public static GetCharactersListResDto from(
-            final Character character,
-            final Long memberId
-    ) {
-        return new GetCharactersListResDto(
-                character.getId(),
-                character.getCharacterName(),
-                character.getCharacterImageUrl(),
-                character.getMember().getId().equals(memberId)
-        );
-    }
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class GetCharactersListResDto{
+
+        private Long characterId;
+        private String characterName;
+        private String characterImageUrl;
+        private LocalDateTime createdAt;
+        private Long likeCount;
+
 }
