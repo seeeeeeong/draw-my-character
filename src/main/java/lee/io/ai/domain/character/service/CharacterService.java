@@ -31,11 +31,7 @@ public class CharacterService {
     }
 
     public List<GetCharactersListResDto> getCharacterList(Long memberId) {
-        List<Character> characters = characterRetriever.getAllCharacters();
-        List<GetCharactersListResDto> getCharactersListResDtos = characters.stream()
-                .map(character -> GetCharactersListResDto.from(character, memberId))
-                .collect(Collectors.toList());
-        return getCharactersListResDtos;
+        return characterRetriever.getAllCharacters();
     }
 
     public GetCharacterDetailResDto getCharacterDetail(Long memberId, Long characterId) {

@@ -24,16 +24,12 @@ public class CharacterRetriever {
         return characterRepository.findByCharacterId(characterId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.CHARACTER_NOT_FOUND));
     }
 
-    public List<Character> getAllCharacters() {
-        return characterRepository.findAll();
+    public List<GetCharactersListResDto> getAllCharacters() {
+        return characterRepository.findAllCharacters();
     }
 
     public List<GetCharactersListResDto> getCharactersByMember(Member member) {
-        List<Character> characters = characterRepository.findByMember(member);
-        List<GetCharactersListResDto> getCharactersListResDtos = characters.stream()
-                .map(character -> GetCharactersListResDto.from(character, member.getId()))
-                .collect(Collectors.toList());
-        return getCharactersListResDtos;
+        return characterRepository.findCharactersByMember(member);
     }
 
 }
