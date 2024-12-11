@@ -48,15 +48,15 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:postgresql://aiservicedb.cne4ko2mylsm.ap-northeast-2.rds.amazonaws.com:5432/postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://aiservice.cne4ko2mylsm.ap-northeast-2.rds.amazonaws.com:3306/aiservice
+    driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
       default_batch_fetch_size: 100
-      ddl-auto: create-drop
+      ddl-auto: none
     open-in-view: false
     properties:
       hibernate:
@@ -74,15 +74,15 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:postgresql://aiservicedb.cne4ko2mylsm.ap-northeast-2.rds.amazonaws.com:5432/postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://aiservice.cne4ko2mylsm.ap-northeast-2.rds.amazonaws.com:3306/aiservice
+    driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
 #      default_batch_fetch_size: 100
-      ddl-auto: create-drop
+      ddl-auto: none
     open-in-view: false
     properties:
       hibernate:

@@ -11,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@Table(name = "`character`")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,7 +23,7 @@ public class Character extends BaseTimeEntity {
 
     private String characterName;
 
-    @Column(name = "character_image", length = 2000)
+    @Column(name = "character_image_url", length = 2000)
     private String characterImageUrl;
 
     @Column(name = "features", length = 2000)

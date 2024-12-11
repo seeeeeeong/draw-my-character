@@ -17,6 +17,5 @@ public class GetCharactersListResDto{
         private String characterName;
         private String characterImageUrl;
         private LocalDateTime createdAt;
-        private Long likeCount;
 
 }
