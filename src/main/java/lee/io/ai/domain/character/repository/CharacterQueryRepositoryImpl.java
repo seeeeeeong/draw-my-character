@@ -1,6 +1,7 @@
 package lee.io.ai.domain.character.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import lee.io.ai.domain.character.dto.GetCharactersListResDto;
 import lee.io.ai.domain.character.entity.Character;
 import lee.io.ai.domain.member.entity.Member;
@@ -32,22 +33,26 @@ public class CharacterQueryRepositoryImpl extends Querydsl5RepositorySupport imp
 
     @Override
     public List<GetCharactersListResDto> findAllCharacters() {
-        return select(
-                Projections.fields(
-                        GetCharactersListResDto.class,
-                        character.id.as("characterId"),
-                        character.characterName,
-                        character.characterImageUrl,
-                        character.createdAt,
-                        likes.id.count().as("likeCount")
-                ))
-                .from(character)
-                .leftJoin(likes).on(character.id.eq(likes.character.id))
-                .groupBy(character.id, character.characterName, character.createdAt)
-                .orderBy(likes.id.count().desc())
-                .limit(30)
-                .fetch();
+
+        JPAQuery<Long> likeCountQuery = select(likes.character.id)
+            .from(likes)
+            .groupBy(likes.character.id)
+            .orderBy(likes.character.id.count().desc())
+            .limit(30);
+
+        return select(Projections.fields(
+            GetCharactersListResDto.class,
+            character.id.as("characterId"),
+            character.characterName,
+            character.characterImageUrl,
+            character.createdAt
+        ))
+            .from(character)
+            .where(character.id.in(likeCountQuery))
+            .groupBy(character.id)
+            .fetch();
     }
+
 
     @Override
     public List<GetCharactersListResDto> findCharactersByMember(Member member) {
@@ -57,8 +62,7 @@ public class CharacterQueryRepositoryImpl extends Querydsl5RepositorySupport imp
                         character.id.as("characterId"),
                         character.characterName,
                         character.characterImageUrl,
-                        character.createdAt,
-                        likes.id.count().as("likeCount")
+                        character.createdAt
                 ))
                 .from(character)
                 .leftJoin(likes).on(character.id.eq(likes.character.id))
